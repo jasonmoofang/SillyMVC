@@ -6,6 +6,8 @@ $base_path = explode($_SERVER['DOCUMENT_ROOT'], __DIR__)[1];
 $request_uri = explode('?', $_SERVER['REQUEST_URI'], 2);
 if ($base_path) {
   $request_uri = explode($base_path, $request_uri[0])[1];
+} else {
+  $request_uri = $request_uri[0];
 }
 $request_uri = explode('/', $request_uri);
 
@@ -14,7 +16,18 @@ $root_action = "home";
 $dashboard_controller = "pages";
 $dashboard_action = "dashboard";
 
+// Do automigrations if enabled
+require __DIR__."/config.php";
+if (AUTO_MIGRATE) {
+  $_REQUEST['secret'] = "ltvkTZddWt3Z2hXYH2XT";
+  require __DIR__."/migrate.php";
+}
+
 // Route it up!
+// Simple mechanism that automatically routes "name1/name2" to name1_controller->name2().
+// Query params are in generic GET strings eg "name1/name2?var1=a,var2=b.
+// All public methods in controller classes are considered valid actions.
+// Helpers should be made non-public
 switch ($request_uri[1]) {
   // Home page
   case '':
