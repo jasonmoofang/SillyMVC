@@ -11,7 +11,7 @@ class Users extends DB {
   
   public function tryAuthenticate($params) {
     $res = $this->runQuery("SELECT * FROM `".$this->table_name."`
-                            WHERE email='%s' AND password_hash=MD5('%s');",
+                            WHERE email='%s' AND password_hash=SHA2(CONCAT(salt, '%s'), 256);",
                               array($params['email'], $params['password']))->getRow();
     return $res;
   }
