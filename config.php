@@ -21,7 +21,7 @@ define("LOG_LEVEL", 10);
 define("API_SECRET", "api_secret");
 
 // Mail settings
-define("MAIL_FROM_ADDRESS", "noreply@mdeals.com");
+define("MAIL_FROM_ADDRESS", "noreply@yuenhoe.com");
 define("USE_SMTP", TRUE);
 define("SMTP_DEBUG_MESSAGES", TRUE);
 define("SMTP_HOST", "smtp.gmail.com");
@@ -31,3 +31,14 @@ define("SMTP_PASSWORD", "password");
 // Tasks settings
 define("TASKS_ENABLED", true);
 define("TASKS_PASSWORD", 'task_password');
+
+// increase session timeout, requires a custom session save path
+/***
+$lifespan = 86400;//24 hours
+ini_set('session.gc_maxlifetime', $lifespan);
+session_set_cookie_params($lifespan);
+ini_set('save_path', "/var/www/html/session");
+
+ini_set('session.gc_probability', 1);
+ini_set('session.gc_divisoi', 1000);
+***/

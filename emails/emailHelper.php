@@ -7,7 +7,7 @@ class EmailHelper {
     
     public static function sendEmail($templateName, $vars, $recipients){
         $emailSubjects = array(
-          "testEmail" => "Test email"
+          "testEmail" => "Test email",
         );
         $templatePath = __DIR__ .'/template/'.$templateName.'.html.php';
         
@@ -16,7 +16,7 @@ class EmailHelper {
         }
         
         extract($vars);
-        if (VIEWHELPERINCLUDED !== "yes") {
+        if (!defined('VIEWHELPERINCLUDED') || VIEWHELPERINCLUDED !== "yes") {
           require __DIR__.'/../viewHelper.php';
         }
         ob_start();

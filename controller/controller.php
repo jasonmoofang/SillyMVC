@@ -9,6 +9,7 @@ class Controller {
   protected $controller_name;
   protected $layout;
   protected $login_only_actions;
+  protected $loaded_models = array();
   
   public function __construct() {
   }
@@ -71,7 +72,7 @@ class Controller {
       }
     }
     $VIEW_path = __DIR__.'/../view/'.$controller.'/'.$view.'.html.php';
-    if (VIEWHELPERINCLUDED !== "yes") {
+    if (!defined("VIEWHELPERINCLUDED") || VIEWHELPERINCLUDED !== "yes") {
       require __DIR__.'/../viewHelper.php';
     }
     if ($layout) {
@@ -98,7 +99,19 @@ class Controller {
   }
   
   protected function isLoggedIn() {
-    return Session::isLoggedIn();
+    if (Session::isLoggedIn()) {
+      return true;
+    } else {
+      $cookie = Session::getRememberCookie();
+      if ($cookie !== false &&
+          $this->getModel('users')->checkRememberMe($cookie['user_id'], $cookie['token']) &&
+          $this->getModel('users')->existsWhere(array("id" => $cookie['user_id']))) {
+        Session::logUserIn($cookie['user_id']);
+        return true;
+      }
+      Session::clearAllSession();
+      return false;
+    }
   }
 
   public function defaultAction() {
@@ -230,13 +243,26 @@ class Controller {
     $base_path = $_SERVER['DOCUMENT_ROOT'].$base_path;
     return $base_path."uploads/".$id."/".$name;
   }
+  
+  protected function getModel($name) {
+    if (!$this->loaded_models[$name]) {
+      $this->loaded_models[$name] = Controller::loadModel($name);
+    }
+    return $this->loaded_models[$name];
+  }
+  
+  public static function loadModel($name) {
+    global ${'MODEL_'.$name};
+    require_once __DIR__.'/../model/'.$name.'.php';
+    return ${'MODEL_'.$name};
+  }
 
   public function invokeAction($action) {
     if (!method_exists($this, $action)) {
       require_once __DIR__.'/../404.php';
       return FALSE;
     }
-    if ($this->isLoginOnly($action) && !Session::isLoggedIn()) {
+    if ($this->isLoginOnly($action) && !$this->isLoggedIn()) {
       require_once __DIR__.'/../403.php';
       return FALSE;
     }

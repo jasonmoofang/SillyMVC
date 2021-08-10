@@ -29,8 +29,8 @@ CREATE TABLE `contacts` (
   `first_name` varchar(100) NOT NULL,
   `last_name` varchar(100) NOT NULL,
   `country_id` int(11) NOT NULL DEFAULT '0',
-  `modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-  `created` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified` timestamp NOT NULL DEFAULT '1970-01-01 00:00:01' ON UPDATE CURRENT_TIMESTAMP,
+  `created` timestamp NOT NULL DEFAULT '1970-01-01 00:00:01',
   PRIMARY KEY (`id`),
   KEY `email` (`email`),
   KEY `owner_id` (`owner_id`)
@@ -43,7 +43,7 @@ CREATE TABLE `contacts` (
 
 LOCK TABLES `contacts` WRITE;
 /*!40000 ALTER TABLE `contacts` DISABLE KEYS */;
-INSERT INTO `contacts` VALUES (1,1,'yuenhoe@momocentral.com','Jason','Moofang',0,'2018-09-07 14:49:56','0000-00-00 00:00:00'),(4,1,'hello@momocentral.com','Peachy','Momo',1,'0000-00-00 00:00:00','0000-00-00 00:00:00');
+INSERT INTO `contacts` VALUES (1,1,'yuenhoe@momocentral.com','Jason','Moofang',0,'2018-09-07 14:49:56','1970-01-01 00:00:01'),(4,1,'hello@momocentral.com','Peachy','Momo',1,'1970-01-01 00:00:01','1970-01-01 00:00:01');
 /*!40000 ALTER TABLE `contacts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -87,9 +87,9 @@ CREATE TABLE `users` (
   `last_name` varchar(100) DEFAULT NULL,
   `status` varchar(100) NOT NULL DEFAULT 'active',
   `role` varchar(100) NOT NULL DEFAULT 'user',
-  `created` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` timestamp NOT NULL DEFAULT '1970-01-01 00:00:01',
   `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `last_login` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `last_login` timestamp NOT NULL DEFAULT '1970-01-01 00:00:01',
   PRIMARY KEY (`id`),
   KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
@@ -101,7 +101,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'yuenhoe@momocentral.com','1a1dc91c907325c69271ddf0c944bc72',NULL,NULL,'active','admin','2018-09-03 12:56:35','2018-09-07 15:54:49','0000-00-00 00:00:00');
+INSERT INTO `users` VALUES (1,'yuenhoe@momocentral.com','1a1dc91c907325c69271ddf0c944bc72',NULL,NULL,'active','admin','2018-09-03 12:56:35','2018-09-07 15:54:49','1970-01-01 00:00:01');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

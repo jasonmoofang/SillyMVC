@@ -1,14 +1,11 @@
 <?php
 
 require_once __DIR__.'/controller.php';
-require_once __DIR__.'/../model/users.php';
 
 class PagesController extends Controller {
-  protected $user_model;
 
-  public function __construct($userm) {
+  public function __construct() {
     parent::__construct();
-    $this->user_model = $userm;
     $this->controller_name = "pages";
     $this->layout = "default";
     $this->login_only_actions = array("dashboard", "logout");
@@ -19,7 +16,7 @@ class PagesController extends Controller {
   }
 
   public function dashboard() {
-    $user = $this->user_model->getOne($this->getCurrentUser());
+    $user = $this->getModel('users')->getOne($this->getCurrentUser());
     $this->renderWithLayout('dashboard', 'dashboard');
   }
 
@@ -30,7 +27,7 @@ class PagesController extends Controller {
     $params = $this->getPostParams();
     $vars = array();
     if ($params) {
-      if ($user = $this->user_model->tryAuthenticate($params)) {
+      if ($user = $this->getModel('users')->tryAuthenticate($params)) {
         Session::logUserIn($user['id']);
         $this->setFlashMessage('success', "Welcome back!");
         $this->redirect("dashboard");
@@ -51,7 +48,7 @@ class PagesController extends Controller {
   }
 }
 
-$pagesController = new PagesController($MODEL_users);
+$pagesController = new PagesController();
 if (isset($ROUTE_action)) {
   $pagesController->invokeAction($ROUTE_action);
 }

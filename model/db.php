@@ -2,6 +2,7 @@
 
 require_once __DIR__.'/../config.php';
 require_once __DIR__.'/../constants.php';
+require_once __DIR__.'/../logger.php';
 
 class QueryResult {
   protected $result;
@@ -259,7 +260,7 @@ class DB {
   
   public function createWithTimestamp($assoc, $createdField = "created") {
     $assoc[$createdField] = "NOW()";
-    $this->create($assoc);
+    return $this->create($assoc);
   }
   
   public function escapeFieldname($name) {

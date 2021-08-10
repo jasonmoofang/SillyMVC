@@ -5,7 +5,7 @@ require_once __DIR__."/session.php";
 
 class Roles {
 
-  public static $ROLES_PRIORITY = array("admin", "user");
+  public static $ROLES_PRIORITY = array("superadmin", "admin", "user");
 
   public static function userHasPermission($role, $target_user) {
     return array_search($target_user['role'], self::$ROLES_PRIORITY)

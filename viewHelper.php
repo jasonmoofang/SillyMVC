@@ -2,6 +2,7 @@
 
 require_once __DIR__.'/session.php';
 require_once __DIR__.'/roles.php';
+require_once __DIR__.'/model/users.php';
 
 define("VIEWHELPERINCLUDED", "yes");
 
@@ -48,5 +49,33 @@ function build_new_querystring($vars, $keyvalues) {
     $vars[$key] = $value;
   }
   return http_build_query($vars);
+}
+
+function format_date($date) {
+  return date("d M Y (l)", strtotime($date));
+}
+
+function format_plaintext($text) {
+  return str_replace("\n", "<br />", htmlentities($text));
+}
+
+if(!$MODEL_users){
+  global $MODEL_users;
+}
+
+function tz_list() {
+  $zones_array = array();
+  $timestamp = time();
+  $dummy_datetime_object = new DateTime();
+  foreach(timezone_identifiers_list() as $key => $zone) {
+    date_default_timezone_set($zone);
+    $zones_array[$key]['zone'] = $zone;
+    $zones_array[$key]['diff_from_GMT'] = 'UTC/GMT ' . date('P', $timestamp);
+
+    $tz = new DateTimeZone($zone);
+    $zones_array[$key]['offset'] = $tz->getOffset($dummy_datetime_object) / 3600;
+  }
+
+  return $zones_array;
 }
 
